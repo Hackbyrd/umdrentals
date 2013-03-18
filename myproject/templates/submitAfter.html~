@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include "head.html" %}
+    <link rel="stylesheet" type="text/css" href="/static/css/homeBody.css" />
+  </head>
+
+  <body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=256010727834898";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+    <!-- Top Banner -->
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">UMD Campus Rentals</a>
+          <div class="btn-group pull-right">
+	    <div class="fb-like" data-href="http://www.hackbyrd.com" data-send="true" data-width="450" data-show-faces="true" data-colorscheme="dark"></div>
+          </div>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="/">Home</a></li>
+              <li><a href="/submit">Submit</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- End Top Banner -->
+
+    <center><h1>Thanks!</h1></center>
+    <div class = "submitBox" style="height: 110px;"> <p>Thank you for submiting your apartment/room for rent and subleasing! You can check out your listing using this link: <a href = "/listing/{{listingID}}">Click Here</a>. Feel Free to use this link to share with your friends via Facebook, Twitter etc...</br></br>If you want to remove your listing, please email chenjon12@yahoo.com with your link and state that you want to remove your listing! Thanks!</p>
+    
+<!-- FB Share code -->
+      <div id='fb-root'></div>
+      <script src='http://connect.facebook.net/en_US/all.js'></script>
+      <p><a onclick='postToFeed(); return false;'><img src='/static/images/fbshare.png'  style='cursor: pointer;'
+						       /></a></p>
+      <!-- <p id='msg'></p> -->
+      <script>
+	FB.init({appId: "256010727834898", status: true, cookie: true});
+	
+	function postToFeed() {
+	
+        var imgSource = 'http://www.hackbyrd.com/static/images/CommonsPic.png';
+        {% if listing.building.name == "Commons"%}
+        imgSource = 'http://www.hackbyrd.com/static/images/CommonsPic.png';
+        {% endif %}
+	
+         {% if listing.building.name == "Courtyards"%}
+        imgSource='http://www.hackbyrd.com/static/images/CourtyardsPic.png';
+        {% endif %}
+	
+        {% if listing.building.name == "Varsity"%}
+         imgSource='http://www.hackbyrd.com/static/images/VarsityPic.png';
+        {% endif %}
+	
+        {% if listing.building.name == "View"%}
+        imgSource='http://www.hackbyrd.com/static/images/ViewPic.png';
+         {% endif %}
+	
+        // calling the API ...
+        var obj = {
+        method: 'feed',
+        link: 'http://www.hackbyrd.com/listing/{{listing.id}}',
+          picture: imgSource,
+          name: 'UMD Campus Rentals',
+          caption: 'Room in {{listing.building.name}} for rent',
+          description: 'Rent a room in {{listing.building.name}} for ${{listing.price}}/month.'
+        };
+
+	function callback(response) {
+           document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+        }
+	
+        FB.ui(obj, callback);
+      }
+	
+
+    </script>
+<!-- End FB Share code -->
+    </div>
+
+  </body>
+
+</html>

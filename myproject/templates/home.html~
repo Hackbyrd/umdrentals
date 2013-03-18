@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include "head.html" %}
+    <link rel="stylesheet" type="text/css" href="/static/css/homeBody.css" />
+  </head>
+
+  <style>
+    a {
+       color: black;
+    }
+  </style>
+
+  <script type="text/javascript">
+
+        $(init); // call this function on page load
+
+        /* Initial Function when page is loaded */
+        function init() {
+	  $(".homeContent").hide();
+	}
+
+	
+  </script>
+
+  <body onLoad="checkform()">
+    
+    {% include "topBanner.html" %}
+    <center><h1>Filter Current Listings</h1></center>
+    <div class = "topBox">
+    <div class="homeSearchBoxOuter">
+    <div class="homeSearchBox">
+      <form name="searchform">
+	<input type="checkbox" checked="yes" id="commons" value="commons" /> South Campus Commons 
+	<input type="checkbox" checked="yes" id="courtyards" value="courtyards"> Courtyards
+	<input type="checkbox" checked="yes" id="varsity" value="varsity"> Varsity
+	<input type="checkbox" checked="yes" id="view" value="view"> University View
+	</br></br>
+
+	<div class="homeSearchBoxLayer">
+	<div class="homeSearchBoxInner" style="text-align: right;">Start Lease <input style="width: 120px; margin: 5px 0px 5px 0px;" type="date" name="startdate" id="startdate"/></div>
+	<div class="homeSearchBoxInner" style="text-align: right;">End Lease <input style="width: 120px; margin: 5px 0px 5px 0px;" type="date" name="enddate" id="enddate"/></div>
+	</div>
+
+	<div class="homeSearchBoxLayer">
+	<div class="homeSearchBoxInner" style="text-align: right;">Price Range <select style="width: 80px; margin: 5px 0px 5px 0px;" name="prices" id="prices" >
+	  <option value="all">All</option>	  
+	  <option value="less500">&#8804; $500</option>
+	  <option value="less1000">&#8804; $1000</option>
+	  <option value="great1000">&#62; $1000</option>
+	</select></div>
+	<div class="homeSearchBoxInner" style="text-align: right;">Number of Rooms <select style="width: 50px; margin: 5px 0px 5px 0px;" name="numrooms" id="numrooms">
+	  <option value="1">1</option>
+	  <option value="2">2</option>
+	  <option value="3">3</option>
+	  <option value="4">4</option>
+	</select></div>
+	</div>
+	
+	<div class="homeSearchBoxLayer" style="text-align: right;">
+	<input type="reset" value="Reset" />
+	<input type="submit" value="Search" onclick="checkform(); return false;"/>
+	</div>
+      </form>
+    </div>
+    </div>
+       <div class="trySubmitBox">
+            <div class="trySubmitInner">
+               <center><h3><u>Submit A Room</u></h3></center>
+               To Sublease, Lease, or Rent Your Apartment... </br></br>Submit a <a href="/submit" style="color: blue; text-decoration: underline;">FORM</a> to advertise your room on UMD Campus Rentals and easily share your listing!</br>
+            </div>
+       </div>
+    </div>
+
+    <script type="text/javascript">
+      function checkform(){
+
+           var com = false;
+	   if(document.getElementById("commons").checked)
+	   com = true;
+
+	var court= false;
+	if(document.getElementById("courtyards").checked)
+	court =true;
+
+        var vars= false;
+	if(document.getElementById("varsity").checked)
+	vars =true;
+	        
+        var view= false;
+	if(document.getElementById("view").checked)
+	view =true;
+
+        var startlease = document.getElementById("startdate").value;
+        var endlease = document.getElementById("enddate").value;
+
+        if (startlease == ""){
+            var startyear="any";
+            var startmonth="any";
+            var startday = "any";
+        }
+        else{
+            var startsplit=startlease.split("-");
+            var startyear = parseInt(startsplit[0]);
+            var startmonth = startsplit[1];
+            if (parseInt(startmonth) == 0){
+                startmonth = startmonth.charAt(1);
+            }
+            startmonth = parseInt(startmonth);
+            var startday = startsplit[2];
+            if (parseInt(startday) == 0){
+                startday = startday.charAt(1);
+            }
+            startday = parseInt(startday);
+        } 
+        if (endlease ==""){
+            var endyear="any";
+            var endmonth="any";
+            var endday = "any";
+        }
+        else{
+            var endsplit=endlease.split("-");
+            var endyear = parseInt(endsplit[0]);
+            var endmonth = endsplit[1];
+            if (parseInt(endmonth) == 0){
+                endmonth = endmonth.charAt(1);
+            }
+            endmonth = parseInt(endmonth);
+            var endday = endsplit[2];
+            if (parseInt(endday) == 0){
+                endday = endday.charAt(1);
+            }
+            endday = parseInt(endday);
+        }
+            if (endlease != "" && startlease != "" &&(endyear < startyear || endyear == startyear && endmonth < startmonth || endyear == startyear && endmonth == startmonth && endday < startday)){
+                alert("START LEASE DATE MUST COME BEFORE END LEASE DATE");
+                return;
+            }
+            if (endlease != "" && startlease != "" && ((endyear == startyear || (endyear - startyear == 1 && startmonth == 12 && endmonth == 1)) && ((endmonth == startmonth) || ((endmonth - startmonth == 1 || endmonth - startmonth == -11) && (endday - startday < 0))))){
+                alert("LEASE MUST BE LONGER THAN 1 MONTH");
+                return;
+            }
+
+        var pricerange = document.getElementById("prices").value;
+
+        var numrooms = document.getElementById("numrooms").value;
+
+        $.ajax({
+
+                url:"/commons=" + com + "/courtyards=" + court + "/varsity=" + vars + "/view=" + view + "/" + startyear + "/" + startmonth + "/" + startday + "/" + endyear + "/" + endmonth + "/" + endday + "/" + pricerange + "/" + numrooms + "/", /* url where you can pass in variables to django and python */
+                type: "GET", /* define type 'GET' or 'POST' */
+
+                /* if ajax is succesful, the return value from python is 'response' */
+                success: function(response){
+	        var resp = eval(response);
+		$(".homeContent").show();
+                $(".homeContent").html("");
+
+	        if (resp.length == 0) { $(".homeContent").html("<center><h4>Your Search Returned No Results... Please Try Again...</h4></center>"); }
+                     
+	        for (i in resp){
+		        var div_string = "<a href='/listing/" + resp[i].pk + "'>"; 
+		        div_string += "<div class='resultBox'>";
+			if (resp[i].fields.building == "1"){
+			        div_string += "<img src='/static/images/CommonsPic.png'/>";
+				div_string += "<div class='resultBoxInfo'>";
+			       div_string += "<center><u><b><h3>Commons";
+                        }
+		        else if (resp[i].fields.building == "2"){
+			       div_string += "<img src='/static/images/CourtyardsPic.png'/>";
+			       div_string += "<div class='resultBoxInfo'>";
+		               div_string += "<center><u><b><h3>Courtyards";
+                        }
+                        else if (resp[i].fields.building == "3"){
+			        div_string += "<img src='/static/images/VarsityPic.png'/>";
+			       div_string += "<div class='resultBoxInfo'>";
+                                div_string += "<center><u><b><h3>The Varsity";
+                        }
+                        else{ // (resp[i].fields.building == "4")
+			        div_string += "<img src='/static/images/ViewPic.png'/>";
+			        div_string += "<div class='resultBoxInfo'>";
+                                div_string += "<center><u><b><h3>The View";
+                        }
+                        if (resp[i].fields.room){
+			        div_string += " Room: " + resp[i].fields.room + "</h3></b></u></center>";
+                        }
+			div_string += "</br>";
+			var startsplit = resp[i].fields.start_lease.split("-");
+			var endsplit = resp[i].fields.end_lease.split("-");
+		        div_string += "<b>Leasing:</b> <i>" + startsplit[1] + "/" + startsplit[0] + "</i> to <i>" + endsplit[1] + "/" + endsplit[0];
+		        var pubsplit = resp[i].fields.pub_date.split("T");
+		        var pubdatesplit = pubsplit[0].split("-");
+		        div_string += "</i><br /></br>";
+                        div_string += "<b>Price:</b> $" + resp[i].fields.price;
+		        if(resp[i].fields.negotiable){div_string+=" (Negotiable)"}			
+
+			div_string += "<br /></br>";
+			div_string += "Published on " + pubdatesplit[1] + "/" + pubdatesplit[2] + "/" + pubdatesplit[0] + " at " + pubsplit[1].substring(0, 5);
+			div_string += "</div>";
+			div_string += "</div>";
+                        div_string += "</a>";
+                        $(".homeContent").append(div_string);
+		}
+        
+               
+                },
+
+                /* if ajax fails */
+                error: function(response){
+                   return null;
+                },
+
+            }) // end AJAX
+
+
+        }
+
+      </script>
+
+
+    <div class="homeContent">
+    
+    </div>
+    
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/bootstrap-transition.js"></script>
+    <script src="/static/js/bootstrap-alert.js"></script>
+    <script src="/static/js/bootstrap-modal.js"></script>
+    <script src="/static/js/bootstrap-dropdown.js"></script>
+    <script src="/static/js/bootstrap-scrollspy.js"></script>
+    <script src="/static/js/bootstrap-tab.js"></script>
+    <script src="/static/js/bootstrap-tooltip.js"></script>
+    <script src="/static/js/bootstrap-popover.js"></script>
+    <script src="/static/js/bootstrap-button.js"></script>
+    <script src="/static/js/bootstrap-collapse.js"></script>
+    <script src="/static/js/bootstrap-carousel.js"></script>
+    <script src="/static/js/bootstrap-typeahead.js"></script>
+    
+    
+  </body>
+</html>

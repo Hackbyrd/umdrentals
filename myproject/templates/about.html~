@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include "head.html" %}
+<link rel="stylesheet" type="text/css" href="/static/css/homeBody.css" />
+    <title>About | Campus Rentals</title>
+  </head>
+
+  <body>
+
+    <!-- Top Banner -->
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">UMD Campus Rentals</a>
+          <div class="btn-group pull-right">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+              <i class="icon-user"></i>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Profile</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Sign Out</a></li>
+            </ul>
+          </div>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="/">Home</a></li>
+              <li><a href="/submit">Submit</a></li>
+              <li class="active"><a href="/about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <!-- End Top Banner -->
+
+    <center><h1>About UMD Campus Rentals</h1></center>
+    <div class = "submitBox" style="min-height: 220px;">
+      <p>UMD Campus Rentals is a new portal that allows you to search through available apartments at the Varsity, University View, South Campus Commons, and the Courtyards. In the past, searching for apartments available during the summer included hours of scanning facebook groups and various forum. UMD Campus Rentals solves this problem by making it easy for apartment owners to lease their apartment or for prospective renters to find an apartment in their price range. </br> </br> UMD Campus Rentals was created by 3 UMD Computer Science Undergraduates and 1 UMD Computer Engineering Undergraduate. </br></br> Jonathan Chen | Sawyer Symington | Dylan Symington | Evan Sandler</p>
+    </div>
+  </body>
+
+</html>
+

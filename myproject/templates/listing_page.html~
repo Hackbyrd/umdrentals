@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include "head.html" %}
+    <link rel="stylesheet" type="text/css" href="/static/css/homeBody.css" />
+  </head>
+
+<body>
+  <!-- FB Comment Code -->
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=256010727834898";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<!-- End Code for FB Comments -->
+
+    <!-- Top Banner -->
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">UMD Campus Rentals</a>
+          <div class="btn-group pull-right">
+	    <div class="fb-like" data-href="http://www.hackbyrd.com" data-send="true" data-width="450" data-show-faces="false" data-colorscheme="dark"></div>
+<!--            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+              <i class="icon-user"></i>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Profile</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Sign Out</a></li>
+            </ul>
+-->          </div>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="/">Home</a></li>
+              <li><a href="/submit">Submit</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <!-- End Top Banner -->
+    
+    <center><h1>{{ listing.building }} Apartment</h1></center>
+    <div class="listingBox">
+
+      {% if listing.building.name == "Commons"%}
+         <img src="/static/images/CommonsPic.png">
+      {% endif %}
+
+      {% if listing.building.name == "Courtyards"%}
+         <img src="/static/images/CourtyardsPic.png">
+      {% endif %}
+
+      {% if listing.building.name == "Varsity"%}
+         <img src="/static/images/VarsityPic.png">
+      {% endif %}
+
+      {% if listing.building.name == "View"%}
+         <img src="/static/images/ViewPic.png">
+      {% endif %}
+
+	 </br>
+	 <hr style="color:black;background-color:black;"/>
+      {% if listing.room %}
+         <p><b>Room:</b> {{listing.room}}</p>
+      {% endif %}
+      <p><b>Start Lease:</b> <i>{{listing.start_lease}}</i></p>
+      <p><b>End Lease:</b> <i>{{listing.end_lease}}</i></p>
+      <p><b>Price:</b> {% if listing.price %}${{listing.price}}/month {% if listing.negotiable%}(negotiable){% endif %}{% else %}<i>negotiable</i>{% endif %}</p>
+      <p><b>Description:</b> {{listing.description}}</p>
+      <hr/>
+      <h3><u>Check Availability</u></h3></br>
+      <form action="/listing/{{listing.id}}/" method="post">{% csrf_token %}
+	{{ form.non_field_errors }}
+          Name: <input style="width: 150px; height: 17px; margin: 5px 0px;" id="id_name" type="text" name="name" maxlength="100" />
+	<div style="float:right">
+          Email: <input style="width: 150px; height: 17px; margin: 5px 0px;" id="id_email" type="email" name="email" maxlength="255" />
+        </div>
+	  </br></br>Message:</br></br>
+	<textarea style="width: 440px; height: 100px;"id="message" rows="10" cols="40" name="message"></textarea>
+	<input type="hidden", name="lid" value="{{listing.id}}"/>
+	<input type="reset" value="Reset"/>
+	<input type="submit" value="Send" />
+	<br />
+	<br />
+	<br />
+      <!-- FB Share code -->
+      <div id='fb-root'></div>
+    <script src='http://connect.facebook.net/en_US/all.js'></script>
+    <p style="float:right;"><a onclick='postToFeed(); return false;'><img src='/static/images/fbshare.png' style='cursor: pointer;' /></a></p>
+<!--    <p id='msg'></p> -->
+
+    <script> 
+      FB.init({appId: "256010727834898", status: true, cookie: true});
+
+      function postToFeed() {
+
+         var imgSource = 'http://www.hackbyrd.com/static/images/CommonsPic.png';
+         {% if listing.building.name == "Commons"%}
+         imgSource = 'http://www.hackbyrd.com/static/images/CommonsPic.png';
+	 {% endif %}
+
+         {% if listing.building.name == "Courtyards"%}
+         imgSource='http://www.hackbyrd.com/static/images/CourtyardsPic.png';
+         {% endif %}
+
+         {% if listing.building.name == "Varsity"%}
+         imgSource='http://www.hackbyrd.com/static/images/VarsityPic.png';
+         {% endif %}
+
+         {% if listing.building.name == "View"%}
+         imgSource='http://www.hackbyrd.com/static/images/ViewPic.png';
+         {% endif %}
+
+        // calling the API ...
+        var obj = {
+          method: 'feed',
+          link: 'http://www.hackbyrd.com/listing/{{listing.id}}',
+          picture: imgSource,
+          name: 'UMD Campus Rentals',
+          caption: 'Room in {{listing.building.name}} for rent',
+          description: 'Rent a room in {{listing.building.name}} for ${{listing.price}}/month.'
+        };
+
+        function callback(response) {
+          document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+        }
+
+        FB.ui(obj, callback);
+      }
+
+    
+    </script>
+<!-- End FB Share code -->
+      </form>
+    </div>
+
+    <!-- Code to call FB comments -->
+    <center>
+    <div class="fb-comments" data-href="http://www.hackbyrd.com/listing/{{listing.id}}" data-num-posts="2" data-width="470"></div>
+    </center>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>

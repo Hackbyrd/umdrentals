@@ -1,0 +1,56 @@
+<meta charset="utf-8">
+    <title>Home: Campus Rentals</title>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+    <link rel = "shortcut icon" type = "image/x-icon" href="/static/images/favicon.ico">
+    <!-- Le styles -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+    </style>
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- Collapsible Menu JS -->
+    <script language="javascript">
+    function getItem(id)
+    {
+        var itm = false;
+        if(document.getElementById)
+            itm = document.getElementById(id);
+        else if(document.all)
+            itm = document.all[id];
+        else if(document.layers)
+            itm = document.layers[id];
+
+        return itm;
+    }
+
+    function toggleItem(id)
+    {
+        alert("Toggle item called");
+        itms = getElementsByClassName(id);
+        if (!itms){
+            alert("FAIL");
+            return false;
+        }
+        for (var i=0; i < itms.length; i++){
+            alert("in loop");
+            if(!itms[i])
+                return false;
+
+            if(itms[i].style.display == 'none')
+                itms[i].style.display = '';
+            else
+                itms[i].style.display = 'none';
+        }
+
+        return false;
+    }
+    </script>
